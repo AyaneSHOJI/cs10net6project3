@@ -1,0 +1,1 @@
+﻿-Fundamental principal is DRY (Don't Repeat Yourself)

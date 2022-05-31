@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using static System.Console;
+using Microsoft.Extensions.Configuration;
 
 //// p.131 Chapter04 Writing, Debugging, and Testing Functions
 
@@ -228,3 +229,21 @@ Trace.AutoFlush = true;
 
 Debug.WriteLine("Debug says, I am watching!");
 Trace.WriteLine("Trace says, I am wathcing!");
+
+// P.157 switching trace leves
+ConfigurationBuilder builder = new();
+builder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsetting.json", optional: true, reloadOnChange: true);
+
+IConfigurationRoot config = builder.Build();
+
+TraceSwitch ts = new(
+    displayName: "PacktSwitch",
+    description: "This switch is set via a Json config.");
+
+config.GetSection("PacktSwitch").Bind(ts);
+
+Trace.WriteLine(ts.TraceError, "Trace error");
+Trace.WriteLine(ts.TraceWarning, "Trace warning");
+Trace.WriteLine(ts.TraceInfo, "Trace information");
+Trace.WriteLine(ts.TraceVerbose, "Trace verbose");
+ReadLine();
